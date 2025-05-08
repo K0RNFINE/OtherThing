@@ -21,6 +21,7 @@
       background: url(leoneed.jpg) no-repeat center center fixed;
       background-size: cover;
       position: relative;
+      
     }
 
     /* Dark overlay */
@@ -128,6 +129,21 @@
 </head>
 <body>
   <div class="stars" id="stars-container"></div>
+      <!-- Mute/Unmute Button -->
+    <button id="muteBtn" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    padding: 10px 16px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+    ">🔇 Mute</button>
 
   <!-- Add an audio player with autoplay and loop -->
   <audio id="background-audio" autoplay loop muted>
@@ -144,15 +160,24 @@
   </div>
 
   <script>
-    // Function to unmute the audio after the page loads
-    window.onload = function() {
-      const audio = document.getElementById('background-audio');
-      // Ensure audio starts muted, then unmute it
-      setTimeout(function() {
-        audio.muted = false;
-        audio.play(); // Play the audio if not already playing
-      }, 100); // Delay to ensure the audio element is fully loaded before unmuting
-    };
+        // Add background music
+    const bgMusic = new Audio("SToRY.mp3");
+    bgMusic.loop = true;
+    bgMusic.volume = 0.6;
+    bgMusic.play();
+
+    // Mute/Unmute button logic
+    const muteBtn = document.getElementById("muteBtn");
+    muteBtn.addEventListener("click", () => {
+      if (bgMusic.muted) {
+        bgMusic.muted = false;
+        muteBtn.textContent = "🔇 Mute";
+      } else {
+        bgMusic.muted = true;
+        muteBtn.textContent = "🔊 Unmute";
+      }
+    });
+
 
     function selectDifficulty(level) {
       if (level === 'easy') {
