@@ -2,283 +2,148 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>205 Buttons Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Memory Game</title>
   <style>
     body {
-      margin: 0;
-      padding: 20px;
-      background-color: #f9fafb;
       font-family: sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+    }
+    h1 {
+      margin-top: 30px;
     }
     .button-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-      gap: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 400px;
+      margin: 40px auto;
     }
-    .button-grid a {
-      display: block;
-      width: 100%;
-      padding: 20px 0;
-      background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+    .btn {
+      width: 150px;
+      height: 150px;
+      margin: 10px;
+      border: none;
       border-radius: 12px;
-      text-decoration: none;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      text-align: center;
-      color: #000;
+      font-size: 24px;
+      color: white;
+      cursor: pointer;
+      outline: none;
+      transition: opacity 0.2s ease;
     }
-    .button-grid a:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    .red { background: #e74c3c; }
+    .blue { background: #3498db; }
+    .green { background: #2ecc71; }
+    .yellow { background: #f1c40f; color: black; }
+    .btn:active,
+    .btn.active {
+      opacity: 0.6;
+    }
+    button#toggleMusic {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
-  <div class="button-grid" id="buttonContainer"></div>
 
-  <script>
- 
-    const buttons = [
-      { name: "คิด", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "ว่า", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "จะ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "หา", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "พี่", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "เจอ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "ไหม", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "น้อง", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "ขอ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "ให้", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "โชค", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "ดี", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ#" },
-      { name: "นะ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "อิ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "อิ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: ":", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: ")", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "Harder Mode", link: "https://k0rnfine.github.io/Saint_joseph/" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "ERROR.EXE", link: "https://youtu.be/bYB99RIsy-I?si=1oKHPxE7fckHJqtt" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://www.youtube.com/watch?v=ocpDEOXABWg" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/1KheR9w80AA?si=Wvci5oIGlAAMa-SK" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1s", link: "https://k0rnfine.github.io/Merry-Christmas-554698/" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://www.youtube.com/watch?v=RyRfLSOewbU" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "6", link: "https://youtu.be/dOTxUWmonWc?si=LyDjC94tehY3JiyT" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "มัน", link: "https://www.youtube.com/watch?v=ZMbWDpC1N7s&pp=ygUMcmFkIGRvZyBwanNr" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "อย่ากด", link: "https://www.youtube.com/watch?v=GMgsFZ4rkEI" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "N", link: "https://www.youtube.com/watch?v=YgNBoH0yGjU" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "???", link: "https://www.youtube.com/watch?v=u06GqlNiJUY" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "กวางตุ้ง", link: "https://www.youtube.com/watch?v=lP4bnsiK9gk" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      
+<h1>Memory Game - Round <span id="round">1</span>/10</h1>
 
-      
-      // Add more buttons as needed up to 100
-    ];
+<div class="button-grid">
+  <button class="btn red" data-color="red">Red</button>
+  <button class="btn blue" data-color="blue">Blue</button>
+  <button class="btn green" data-color="green">Green</button>
+  <button class="btn yellow" data-color="yellow">Yellow</button>
+</div>
 
-    // Automatically fill with placeholders if fewer than 100 entries
-    while (buttons.length < 205) {
-      buttons.push({ name: `ปุ่ม ${buttons.length + 1}`, link: "#" });
+<button id="toggleMusic">Toggle Music</button>
+
+<audio id="bgm" src="song.mp3" autoplay loop></audio>
+
+<script>
+  const colors = ["red", "blue", "green", "yellow"];
+  let sequence = [];
+  let userSequence = [];
+  let round = 1;
+
+  const buttons = document.querySelectorAll(".btn");
+  const roundDisplay = document.getElementById("round");
+  const bgm = document.getElementById("bgm");
+
+  function playSound(color) {
+    const audio = new Audio(`sounds/${color}.mp3`);
+    audio.play();
+  }
+
+  function flashButton(color) {
+    const btn = document.querySelector(`.btn.${color}`);
+    btn.classList.add("active");
+    playSound(color);
+    setTimeout(() => btn.classList.remove("active"), 400);
+  }
+
+  function generateSequence(length = 1) {
+    for (let i = 0; i < length; i++) {
+      sequence.push(colors[Math.floor(Math.random() * colors.length)]);
+    }
+  }
+
+  function playSequence() {
+    let i = 0;
+    userSequence = [];
+    const interval = setInterval(() => {
+      flashButton(sequence[i]);
+      i++;
+      if (i >= sequence.length) clearInterval(interval);
+    }, 800);
+  }
+
+  function checkUserInput(color) {
+    userSequence.push(color);
+    playSound(color);
+    const index = userSequence.length - 1;
+    if (userSequence[index] !== sequence[index]) {
+      alert("Wrong! Try again from round 1.");
+      round = 1;
+      sequence = [];
+      roundDisplay.textContent = round;
+      generateSequence(1);
+      setTimeout(playSequence, 500);
+      return;
     }
 
-    const container = document.getElementById('buttonContainer');
-    buttons.forEach(({ name, link }) => {
-      const btn = document.createElement('a');
-      btn.href = link;
-      btn.className = "dropdown-item";
-      btn.textContent = name;
-      container.appendChild(btn);
+    if (userSequence.length === sequence.length) {
+      if (round === 10) {
+        alert("Congrats! You completed all 10 rounds!");
+        window.location.href = "https://example.com"; // Change to your URL
+      } else {
+        round++;
+        roundDisplay.textContent = round;
+        generateSequence(1);
+        setTimeout(playSequence, 800);
+      }
+    }
+  }
+
+  buttons.forEach(button => {
+    button.addEventListener("click", () => {
+      const color = button.dataset.color;
+      checkUserInput(color);
     });
-  </script>
+  });
+
+  document.getElementById("toggleMusic").addEventListener("click", () => {
+    if (bgm.paused) {
+      bgm.play();
+    } else {
+      bgm.pause();
+    }
+  });
+
+  generateSequence(1);
+  playSequence();
+</script>
 </body>
 </html>
