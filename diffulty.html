@@ -75,6 +75,37 @@
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     }
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .popup-box {
+      background: white;
+      padding: 40px;
+      text-align: center;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    .popup-box h2 {
+      margin-top: 0;
+    }
+
+    #startButton {
+      padding: 10px 25px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 8px;
+      background-color: #2196f3;
+      color: white;
+      cursor: pointer;
+    }
 
     h1 {
       margin-bottom: 30px;
@@ -128,8 +159,17 @@
   </style>
 </head>
 <body>
+
   <div class="stars" id="stars-container"></div>
       <!-- Mute/Unmute Button -->
+      <div id="popup" class="popup-overlay">
+        <div class="popup-box">
+          <h2>ยินดีต้อนรับนะน้อง</h2>
+          <p>กดปุ่มเพื่อดำเนินการต่อ</p>
+          <button id="startButton">Start</button>
+        </div>
+      </div>
+
     <button id="muteBtn" style="
     position: fixed;
     top: 20px;
@@ -160,11 +200,23 @@
   </div>
 
   <script>
-        // Add background music
-    const bgMusic = new Audio("SToRY.mp3");
-    bgMusic.loop = true;
-    bgMusic.volume = 0.6;
-    bgMusic.play();
+              // Create audio element
+      const bgMusic = new Audio("SToRY.mp3");
+      bgMusic.loop = true;
+      bgMusic.volume = 0.6;
+
+      // Wait for "Start" button
+      document.getElementById("startButton").addEventListener("click", () => {
+        // Start music
+        bgMusic.play().catch((e) => {
+          console.warn("Autoplay blocked:", e);
+        });
+
+        // Hide popup
+        document.getElementById("popup").style.display = "none";
+      });
+
+
 
     // Mute/Unmute button logic
     const muteBtn = document.getElementById("muteBtn");
@@ -188,6 +240,8 @@
         window.location.href = 'https://k0rnfine.github.io/Saint_joseph/';
       }
     }
+
+    
 
     // Create shooting stars
     const container = document.getElementById("stars-container");
