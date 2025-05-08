@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Choose Difficulty</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url(leoneed.jpg) no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+
+    /* Dark overlay */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.12); /* 12% darkness */
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 2em;
+      color: #333;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .difficulty-btn {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      color: white;
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+
+    .difficulty-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .easy {
+      background-color: #4caf50;
+    }
+
+    .normal {
+      background-color: #2196f3;
+    }
+
+    .hard {
+      background-color: #f44336;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Select Difficulty</h1>
+    <div class="button-group">
+      <button class="difficulty-btn easy" onclick="selectDifficulty('easy')">Easy</button>
+      <button class="difficulty-btn normal" onclick="selectDifficulty('normal')">Normal</button>
+      <button class="difficulty-btn hard" onclick="selectDifficulty('hard')">Hard</button>
+    </div>
+  </div>
+
+  <script>
+    function selectDifficulty(level) {
+      // Redirect based on difficulty
+      if (level === 'easy') {
+        window.location.href = 'https://k0rnfine.github.io/OtherThing/4button';
+      } else if (level === 'normal') {
+        window.location.href = 'https://k0rnfine.github.io/OtherThing/';
+      } else if (level === 'hard') {
+        window.location.href = 'https://k0rnfine.github.io/Saint_joseph/';
+      }
+    }
+  </script>
+</body>
+</html>
