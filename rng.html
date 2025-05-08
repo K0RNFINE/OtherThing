@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>205 Daily Shuffle Buttons</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #f0f4f8;
+      font-family: sans-serif;
+    }
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 10px;
+    }
+    .button-grid a {
+      display: block;
+      padding: 16px 0;
+      text-align: center;
+      text-decoration: none;
+      color: #000;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .button-grid a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="button-grid" id="buttonContainer"></div>
+
+  <script>
+    const baseButtons = [
+      { name: "คิด", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "ว่า", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "จะ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "หา", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "พี่", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "เจอ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "ไหม", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "น้อง", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "ขอ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "ให้", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "โชค", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "ดี", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "นะ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "อิ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: ":", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: ")", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "Harder Mode", link: "https://k0rnfine.github.io/Saint_joseph/" },
+      { name: "Easy Mode", link: "https://k0rnfine.github.io/OtherThing/4button" },
+      { name: "ERROR.EXE", link: "https://youtu.be/bYB99RIsy-I?si=1oKHPxE7fckHJqtt" },
+      { name: "ไม่มีไร", link: "https://youtu.be/1KheR9w80AA?si=Wvci5oIGlAAMa-SK" },
+      { name: "1", link: "https://k0rnfine.github.io/Merry-Christmas-554698/" },
+      { name: "DNA", link: "https://www.youtube.com/watch?v=RyRfLSOewbU" },
+      { name: "ทุกๆ 24ชม รี 1 ครั้ง", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { name: "1", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+    ];
+
+    // Repeat until we get 205 buttons
+    const buttons = [];
+    while (buttons.length < 205) {
+      buttons.push(...baseButtons.map(b => ({ ...b })));
+    }
+    buttons.length = 205; // Trim to exactly 205
+
+    // Daily seed based shuffle
+    function seededRandom(seed) {
+      let x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    }
+
+    function shuffleArray(array, seed) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(seededRandom(seed + i) * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const seed = parseInt(today.replace(/-/g, ""), 10);
+    shuffleArray(buttons, seed);
+
+    const container = document.getElementById("buttonContainer");
+    buttons.forEach(button => {
+      const a = document.createElement("a");
+      a.href = button.link;
+      a.textContent = button.name;
+      a.target = "_blank";
+      container.appendChild(a);
+    });
+  </script>
+</body>
+</html>
