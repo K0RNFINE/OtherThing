@@ -48,6 +48,7 @@
       background: linear-gradient(transparent, var(--star-color));
       animation: shoot 3s linear infinite;
       opacity: 0.6;
+      animation-delay: calc(0s + random(2));
     }
 
     @keyframes shoot {
@@ -128,6 +129,12 @@
 <body>
   <div class="stars" id="stars-container"></div>
 
+  <!-- Add an audio player with autoplay and loop -->
+  <audio id="background-audio" autoplay loop muted>
+    <source src="SToRY.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
   <div class="container">
     <h1>Select Difficulty</h1>
     <div class="button-group">
@@ -138,6 +145,16 @@
   </div>
 
   <script>
+    // Function to unmute the audio after the page loads
+    window.onload = function() {
+      const audio = document.getElementById('background-audio');
+      // Ensure audio starts muted, then unmute it
+      setTimeout(function() {
+        audio.muted = false;
+        audio.play(); // Play the audio if not already playing
+      }, 100); // Delay to ensure the audio element is fully loaded before unmuting
+    };
+
     function selectDifficulty(level) {
       if (level === 'easy') {
         window.location.href = 'https://k0rnfine.github.io/OtherThing/4button';
