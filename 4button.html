@@ -9,15 +9,27 @@
     body {
       font-family: sans-serif;
       text-align: center;
-      background: #f0f0f0;
-      background-image: url(Raddog.jpg);
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
     }
+
+    #background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+
     h1 {
       margin-top: 30px;
+      color: white;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
     }
+
     .button-grid {
       display: flex;
       flex-wrap: wrap;
@@ -25,6 +37,7 @@
       max-width: 400px;
       margin: 40px auto;
     }
+
     .btn {
       width: 150px;
       height: 150px;
@@ -37,120 +50,205 @@
       outline: none;
       transition: opacity 0.2s ease;
     }
+
     .red { background: #e74c3c; }
     .blue { background: #3498db; }
     .green { background: #2ecc71; }
     .yellow { background: #f1c40f; color: black; }
+
     .btn:active,
     .btn.active {
       opacity: 0.6;
     }
+
     button#toggleMusic {
       margin-top: 20px;
-      padding: 10px 20px;
+      padding: 10px 24px;
       font-size: 16px;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid white;
+      border-radius: 30px;
+      backdrop-filter: blur(5px);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button#toggleMusic:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+      color: black;
+      border-color: black;
+    }
+
+    a {
+      display: inline-block;
+      margin: 10px;
+      font-size: 18px;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+
+    /* Popup overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .overlay button {
+      padding: 12px 24px;
+      font-size: 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+      background-color: #ffffff;
+      color: black;
+      transition: 0.3s;
+    }
+
+    .overlay button:hover {
+      background-color: #f1c40f;
+      color: black;
     }
   </style>
 </head>
 <body>
 
-<h1 style="color: rgb(0, 0, 0);">Memory Game - Round <span id="round">1</span>/10</h1>
+  <!-- Popup Overlay -->
+  <div class="overlay" id="startOverlay">
+    <h2>Welcome to the Memory Game!</h2>
+    <p>Click continue to start background music and video.</p>
+    <button onclick="startGame()">Continue</button>
+  </div>
 
-<div class="button-grid">
-  <button class="btn red" data-color="red">Red</button>
-  <button class="btn blue" data-color="blue">Blue</button>
-  <button class="btn green" data-color="green">Green</button>
-  <button class="btn yellow" data-color="yellow">Yellow</button>
-  
-</div>
+  <!-- Background Video -->
+  <video id="background-video" loop muted>
+    <source src="RADDOGS.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
 
-<button id="toggleMusic">Toggle Music</button>
+  <h1>Memory Game - Round <span id="round">1</span>/10</h1>
 
-<audio id="bgm" src="song.mp3" autoplay loop></audio>
-<a style="color: #e74c3c;" href="https://k0rnfine.github.io/Saint_joseph/">Hard Mode</a>
-<a style="color: yellow; box-shadow: 10px black;" href="https://k0rnfine.github.io/OtherThing/">Normal Mode</a>
-<script>
-  const colors = ["red", "blue", "green", "yellow"];
-  let sequence = [];
-  let userSequence = [];
-  let round = 1;
+  <div class="button-grid">
+    <button class="btn red" data-color="red">Red</button>
+    <button class="btn blue" data-color="blue">Blue</button>
+    <button class="btn green" data-color="green">Green</button>
+    <button class="btn yellow" data-color="yellow">Yellow</button>
+  </div>
 
-  const buttons = document.querySelectorAll(".btn");
-  const roundDisplay = document.getElementById("round");
-  const bgm = document.getElementById("bgm");
+  <button id="toggleMusic">Mute</button>
 
-  function playSound(color) {
-    const audio = new Audio(`sounds/${color}.mp3`);
-    audio.play();
-  }
+  <audio id="bgm" src="" loop></audio>
 
-  function flashButton(color) {
-    const btn = document.querySelector(`.btn.${color}`);
-    btn.classList.add("active");
-    playSound(color);
-    setTimeout(() => btn.classList.remove("active"), 400);
-  }
+  <br>
+  <a style="color: #e74c3c; background: rgba(255,255,255,0.2);" href="https://k0rnfine.github.io/Saint_joseph/">Hard Mode</a>
+  <a style="color: yellow; background: rgba(0,0,0,0.3);" href="https://k0rnfine.github.io/OtherThing/">Normal Mode</a>
 
-  function generateSequence(length = 1) {
-    for (let i = 0; i < length; i++) {
-      sequence.push(colors[Math.floor(Math.random() * colors.length)]);
-    }
-  }
+  <script>
+    document.getElementById("background-video").muted = true;
+    const colors = ["red", "blue", "green", "yellow"];
+    let sequence = [];
+    let userSequence = [];
+    let round = 1;
 
-  function playSequence() {
-    let i = 0;
-    userSequence = [];
-    const interval = setInterval(() => {
-      flashButton(sequence[i]);
-      i++;
-      if (i >= sequence.length) clearInterval(interval);
-    }, 800);
-  }
+    const buttons = document.querySelectorAll(".btn");
+    const roundDisplay = document.getElementById("round");
+    const bgm = document.getElementById("bgm");
+    const video = document.getElementById("background-video");
+    const toggleBtn = document.getElementById("toggleMusic");
 
-  function checkUserInput(color) {
-    userSequence.push(color);
-    playSound(color);
-    const index = userSequence.length - 1;
-    if (userSequence[index] !== sequence[index]) {
-      alert("Wrong! Try again from round 1.");
-      round = 1;
-      sequence = [];
-      roundDisplay.textContent = round;
-      generateSequence(1);
-      setTimeout(playSequence, 500);
-      return;
+    function playSound(color) {
+      const audio = new Audio(`sounds/${color}.mp3`);
+      audio.play();
     }
 
-    if (userSequence.length === sequence.length) {
-      if (round === 10) {
-        alert("Congrats! You completed all 10 rounds!");
-        window.location.href = "https://k0rnfine.github.io/Merry-Christmas-554698/EasyMode.html"; 
-      } else {
-        round++;
-        roundDisplay.textContent = round;
-        generateSequence(1);
-        setTimeout(playSequence, 800);
+    function flashButton(color) {
+      const btn = document.querySelector(`.btn.${color}`);
+      btn.classList.add("active");
+      playSound(color);
+      setTimeout(() => btn.classList.remove("active"), 400);
+    }
+
+    function generateSequence(length = 1) {
+      for (let i = 0; i < length; i++) {
+        sequence.push(colors[Math.floor(Math.random() * colors.length)]);
       }
     }
-  }
 
-  buttons.forEach(button => {
-    button.addEventListener("click", () => {
-      const color = button.dataset.color;
-      checkUserInput(color);
-    });
-  });
-
-  document.getElementById("toggleMusic").addEventListener("click", () => {
-    if (bgm.paused) {
-      bgm.play();
-    } else {
-      bgm.pause();
+    function playSequence() {
+      let i = 0;
+      userSequence = [];
+      const interval = setInterval(() => {
+        flashButton(sequence[i]);
+        i++;
+        if (i >= sequence.length) clearInterval(interval);
+      }, 800);
     }
-  });
 
-  generateSequence(1);
-  playSequence();
-</script>
+    function checkUserInput(color) {
+      userSequence.push(color);
+      playSound(color);
+      const index = userSequence.length - 1;
+      if (userSequence[index] !== sequence[index]) {
+        alert("Wrong! Try again from round 1.");
+        round = 1;
+        sequence = [];
+        roundDisplay.textContent = round;
+        generateSequence(1);
+        setTimeout(playSequence, 500);
+        return;
+      }
+
+      if (userSequence.length === sequence.length) {
+        if (round === 10) {
+          alert("Congrats! You completed all 10 rounds!");
+          window.location.href = "https://k0rnfine.github.io/Merry-Christmas-554698/EasyMode.html"; 
+        } else {
+          round++;
+          roundDisplay.textContent = round;
+          generateSequence(1);
+          setTimeout(playSequence, 800);
+        }
+      }
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        const color = button.dataset.color;
+        checkUserInput(color);
+      });
+    });
+
+    toggleBtn.addEventListener("click", () => {
+      bgm.muted = !bgm.muted;
+      video.muted = !video.muted;  // Mute/unmute the video as well
+      toggleBtn.textContent = bgm.muted ? "Unmute" : "Mute";
+    });
+
+    // Called when the user clicks the popup "Continue"
+    function startGame() {
+      document.getElementById("startOverlay").style.display = "none";
+      bgm.muted = false;
+      bgm.play();
+      video.muted = false;
+      video.play();
+
+      generateSequence(1);
+      playSequence();
+    }
+  </script>
+
 </body>
 </html>
