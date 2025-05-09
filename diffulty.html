@@ -167,12 +167,11 @@
 <body>
 
   <!-- Background video -->
-    <video id="background-video" muted loop playsinline>
+  <video id="background-video" muted loop playsinline>
     <source src="SToRY.mp4" type="video/mp4">
-    Your browser does not support the video tag
+    Your browser does not support the video tag.
   </video>
   
-
   <div class="stars" id="stars-container"></div>
 
   <div id="popup" class="popup-overlay">
@@ -185,10 +184,6 @@
 
   <button id="muteBtn" style="position: fixed; top: 20px; right: 20px; z-index: 10; padding: 10px 16px; font-size: 16px; border: none; border-radius: 8px; background: rgba(0, 0, 0, 0.6); color: white; cursor: pointer; box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);">🔇 Mute</button>
 
-  <audio id="background-audio" autoplay loop muted>
-    <source src="SToRY.mp3" type="audio/mp3">
-  </audio>
-
   <div class="container">
     <h1>Select Difficulty</h1>
     <div class="button-group">
@@ -199,38 +194,25 @@
   </div>
 
   <script>
-        document.getElementById("startButton").addEventListener("click", () => {
     const bgVideo = document.getElementById("background-video");
 
-    bgMusic.play().catch((e) => {
-        console.warn("Autoplay blocked:", e);
-    });
-
-    bgVideo.play().catch((e) => {
-        console.warn("Video autoplay blocked:", e);
-    });
-
-    document.getElementById("popup").style.display = "none";
-    });
-
-    const bgMusic = new Audio("SToRY.mp3");
-    bgMusic.loop = true;
-    bgMusic.volume = 0.6;
-
+    // Play the video when the "Start" button is clicked
     document.getElementById("startButton").addEventListener("click", () => {
-      bgMusic.play().catch((e) => {
+      bgVideo.play().catch((e) => {
         console.warn("Autoplay blocked:", e);
       });
+
       document.getElementById("popup").style.display = "none";
     });
 
     const muteBtn = document.getElementById("muteBtn");
+    bgVideo.muted = false;
     muteBtn.addEventListener("click", () => {
-      if (bgMusic.muted) {
-        bgMusic.muted = false;
+      if (bgVideo.muted) {
+        bgVideo.muted = false;
         muteBtn.textContent = "🔇 Mute";
       } else {
-        bgMusic.muted = true;
+        bgVideo.muted = true;
         muteBtn.textContent = "🔊 Unmute";
       }
     });
