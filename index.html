@@ -1,329 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="ichika.png">
-  <title>205 Buttons Page</title>
+  <meta charset="UTF-8">
+  <title>Typing Challenge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      margin: 0;
-      padding: 20px;
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px 20px;
+      background-color: #f0f0f0;
       position: relative;
       overflow: hidden;
     }
 
-    video#bgVideo {
+    /* Background video */
+    #backgroundVideo {
       position: fixed;
       top: 0;
       left: 0;
       min-width: 100%;
       min-height: 100%;
-      object-fit: cover;
       z-index: -1;
+      object-fit: cover;
+      display: none;
     }
 
-    .button-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-      gap: 10px;
+    /* Typing area */
+    #sentence {
+      font-size: 24px;
+      margin: 20px 0;
       position: relative;
       z-index: 1;
     }
 
-    .button-grid a {
-      display: block;
+    #input {
       width: 100%;
-      padding: 20px 0;
-      background: linear-gradient(135deg, #0766ff55 0%, #c2e9fb56 100%);
-      border-radius: 12px;
-      text-decoration: none;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      text-align: center;
-      color: #000000;
+      max-width: 600px;
+      font-size: 18px;
+      padding: 12px 15px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      outline: none;
+      transition: border 0.3s;
     }
 
-    .button-grid a:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    #input:focus {
+      border-color: #007bff;
     }
 
-    #muteButton {
+    #timer {
+      font-size: 20px;
+      margin-top: 10px;
+      color: red;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Popup */
+    #popup {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 2;
-      padding: 10px 15px;
-      background: rgba(0, 0, 0, 0.5);
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 999;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    #continueBtn {
+      padding: 15px 30px;
+      font-size: 18px;
+      margin-top: 20px;
+      cursor: pointer;
+      background-color: #28a745;
       color: white;
       border: none;
-      border-radius: 8px;
-      cursor: pointer;
+      border-radius: 30px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, background-color 0.3s ease;
     }
 
-    /* Popup styles */
-    .overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    #continueBtn:hover {
+      transform: scale(1.05);
+      background-color: #218838;
     }
 
-    .popup {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      text-align: center;
-      max-width: 400px;
-    }
-
-    .popup h2 {
-      margin-top: 0;
-    }
-
-    .popup button {
+    /* Mute button */
+    #muteBtn {
       margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #3498db;
-      color: rgb(255, 255, 255);
+      font-size: 16px;
+      padding: 10px 25px;
+      background-color: #007bff;
+      color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 30px;
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    #muteBtn:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
 
-  <video id="bgVideo" loop>
-    <source src="potato.mp4" type="video/mp4">
+  <!-- Background Video -->
+  <video id="backgroundVideo" autoplay loop>
+    <source src="Neo.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <button id="muteButton">Mute</button>
-
-  <div class="button-grid" id="buttonContainer"></div>
-
   <!-- Popup -->
-  <div class="overlay" id="popupOverlay">
-    <div class="popup">
-      <h2>Welcome!</h2>
-      <p>Press continue to start the video and interact with the page.</p>
-      <button id="continueBtn">Continue</button>
-    </div>
+  <div id="popup">
+    <h2>Welcome to the Typing Challenge!</h2>
+    <p>Click continue to begin and start background music/video.</p>
+    <button id="continueBtn" onclick="startExperience()">Continue</button>
   </div>
 
-  <script>
-    const buttons = [
-        { name: "คิด", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "ว่า", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "จะ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "หา", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "พี่", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "เจอ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "ไหม", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "น้อง", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "ขอ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "ให้", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "โชค", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "ดี", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ#" },
-      { name: "นะ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "อิ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "อิ", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: ":", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: ")", link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-      { name: "Harder Mode", link: "https://k0rnfine.github.io/Saint_joseph/" },
-      { name: "Easy Mode", link: "https://k0rnfine.github.io/OtherThing/4button" },
-      { name: "ERROR.EXE", link: "https://youtu.be/bYB99RIsy-I?si=1oKHPxE7fckHJqtt" },
-      { name: "1", link: "https://www.youtube.com/watch?v=ocpDEOXABWg" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://k0rnfine.github.io/Merry-Christmas-554698/modeNormal002.html" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://youtu.be/rwxzolR1Frk?si=_ot92Mt2bzVrUUI7" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/watch?v=RyRfLSOewbU" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://youtu.be/1KheR9w80AA?si=Wvci5oIGlAAMa-SK" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-      { name: "1", link: "https://www.youtube.com/shorts/KQN_vP31yZ0" },
-    ];
+  <!-- Main content -->
+  <h1>Typing Challenge</h1>
+  <div id="sentence"></div>
+  <input type="text" id="input" placeholder="Start typing here...">
+  <div id="timer"></div>
+  <button id="muteBtn" onclick="toggleMute()">Mute</button>
 
-    while (buttons.length < 170) {
-      buttons.push({ name: `ปุ่ม ${buttons.length + 1}`, link: "#" });
+  <script>
+    const sentences = [
+      "สิ่งเล็กๆ เค้าเรียกว่ารัก แต่ถ้าสิ่งลับๆ เค้าเรียกว่าชู้",
+      "ใจสั่นๆ นึกว่าเศร้า ที่ไหนได้หิวข้าวนี่เอง",
+      "JavaScript adds interactivity to websites.",
+      "Practice makes perfect, so keep typing!",
+      "คนที่ทำให้เราหลง คือคนที่ส่งโลเคชั่นผิด",
+      "ถึงวันนี้จะไม่ดีแต่วันหน้าก็ยังดีเสมอ",
+    ];
+    const maxSentences = 2;
+    const timeLimit = 30;
+    const nextPage = "https://k0rnfine.github.io/Merry-Christmas-554698/modeNormal002.html";
+
+    let currentSentence = "";
+    let currentIndex = 0;
+    let timeLeft = timeLimit;
+    let timerInterval;
+
+    const sentenceDiv = document.getElementById("sentence");
+    const inputField = document.getElementById("input");
+    const timerDiv = document.getElementById("timer");
+    const backgroundVideo = document.getElementById("backgroundVideo");
+    const muteBtn = document.getElementById("muteBtn");
+
+    function getRandomSentence(exclude) {
+      let filtered = sentences.filter(s => s !== exclude);
+      return filtered[Math.floor(Math.random() * filtered.length)];
     }
 
-    const container = document.getElementById('buttonContainer');
-    buttons.forEach(({ name, link }) => {
-      const btn = document.createElement('a');
-      btn.href = link;
-      btn.textContent = name;
-      container.appendChild(btn);
+    function startTimer() {
+      timeLeft = timeLimit;
+      timerDiv.textContent = `Time left: ${timeLeft}s`;
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDiv.textContent = `Time left: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          nextSentence();
+        }
+      }, 1000);
+    }
+
+    function nextSentence() {
+      if (currentIndex >= maxSentences) {
+        window.location.href = nextPage;
+        return;
+      }
+      currentSentence = getRandomSentence(currentSentence);
+      sentenceDiv.textContent = currentSentence;
+      inputField.value = "";
+      currentIndex++;
+      startTimer();
+    }
+
+    inputField.addEventListener("input", () => {
+      if (inputField.value === currentSentence) {
+        nextSentence();
+      }
     });
 
-    const video = document.getElementById('bgVideo');
-    const muteBtn = document.getElementById('muteButton');
-    const overlay = document.getElementById('popupOverlay');
-    const continueBtn = document.getElementById('continueBtn');
+    function startExperience() {
+      document.getElementById("popup").style.display = "none";
+      backgroundVideo.style.display = "block";
+      backgroundVideo.muted = false; // Enable sound by default
+      backgroundVideo.play();
+    }
 
-    // Initially unmuted
-    video.muted = false;
-    muteBtn.textContent = 'Mute';
+    function toggleMute() {
+      backgroundVideo.muted = !backgroundVideo.muted;
+      muteBtn.textContent = backgroundVideo.muted ? "Unmute" : "Mute";
+    }
 
-    // Mute toggle
-    muteBtn.addEventListener('click', () => {
-      video.muted = !video.muted;
-      muteBtn.textContent = video.muted ? 'Unmute' : 'Mute';
-    });
-
-    // Wait for user interaction to start the video
-    continueBtn.addEventListener('click', () => {
-      overlay.style.display = 'none';
-      video.play().catch(err => console.error('Video play failed:', err));
-    });
+    // Prepare first sentence
+    currentSentence = getRandomSentence("");
+    sentenceDiv.textContent = currentSentence;
   </script>
+
 </body>
 </html>
