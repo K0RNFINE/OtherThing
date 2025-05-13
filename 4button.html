@@ -7,11 +7,12 @@
   <title>Memory Game</title>
   <style>
     body {
-      font-family: sans-serif;
-      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
       overflow: hidden;
+      background-color: #000;
+      color: white;
     }
 
     #background-video {
@@ -21,119 +22,147 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
+      z-index: -2;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(5px);
       z-index: -1;
     }
 
     h1 {
-      margin-top: 30px;
-      color: white;
-      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+      margin-top: 40px;
+      font-size: 2.5em;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
     }
 
     .button-grid {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(2, 150px);
+      gap: 30px;
       justify-content: center;
-      max-width: 400px;
-      margin: 40px auto;
+      margin-top: 50px;
     }
 
     .btn {
       width: 150px;
       height: 150px;
-      margin: 10px;
       border: none;
-      border-radius: 12px;
+      border-radius: 20px;
       font-size: 24px;
       color: white;
       cursor: pointer;
-      outline: none;
-      transition: opacity 0.2s ease;
+      transition: all 0.3s ease;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
     }
 
-    .red { background: #e74c3c; }
-    .blue { background: #3498db; }
-    .green { background: #2ecc71; }
-    .yellow { background: #f1c40f; color: black; }
+    .btn.red    { background: #e74c3c; box-shadow: 0 0 25px #e74c3c; }
+    .btn.blue   { background: #3498db; box-shadow: 0 0 25px #3498db; }
+    .btn.green  { background: #2ecc71; box-shadow: 0 0 25px #2ecc71; }
+    .btn.yellow { background: #f1c40f; color: black; box-shadow: 0 0 25px #f1c40f; }
 
-    .btn:active,
-    .btn.active {
+    .btn:active, .btn.active {
       opacity: 0.6;
+      transform: scale(0.95);
     }
 
-    button#toggleMusic {
-      margin-top: 20px;
-      padding: 10px 24px;
+    #toggleMusic {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
       font-size: 16px;
-      background-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.15);
       color: white;
       border: 2px solid white;
-      border-radius: 30px;
-      backdrop-filter: blur(5px);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: 0.3s;
+      z-index: 10;
     }
 
-    button#toggleMusic:hover {
-      background-color: rgba(255, 255, 255, 0.4);
+    #toggleMusic:hover {
+      background: rgba(255, 255, 255, 0.3);
       color: black;
       border-color: black;
     }
 
-    a {
-      display: inline-block;
-      margin: 10px;
-      font-size: 18px;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 8px 16px;
-      border-radius: 8px;
-    }
-
-    /* Popup overlay */
     .overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.85);
-      color: white;
-      z-index: 9999;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      z-index: 9999;
+    }
+
+    .overlay h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
     }
 
     .overlay button {
       padding: 12px 24px;
-      font-size: 20px;
+      font-size: 18px;
       border-radius: 8px;
       border: none;
       cursor: pointer;
-      margin-top: 20px;
-      background-color: #ffffff;
-      color: black;
+      background: #00bcd4;
+      color: white;
+      box-shadow: 0 0 10px #00bcd4;
       transition: 0.3s;
     }
 
     .overlay button:hover {
-      background-color: #f1c40f;
+      background: #00ffff;
+      box-shadow: 0 0 20px #00ffff;
+      color: black;
+    }
+
+    .links {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .links a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+      transition: 0.3s;
+    }
+
+    .links a:hover {
+      background: rgba(255,255,255,0.6);
       color: black;
     }
   </style>
 </head>
 <body>
 
-  <!-- Popup Overlay -->
   <div class="overlay" id="startOverlay">
     <h2>Welcome to the Memory Game!</h2>
-    <p>Click continue to start background music and video.</p>
+    <p>Click continue to begin your mission.</p>
     <button onclick="startGame()">Continue</button>
   </div>
 
-  <!-- Background Video -->
   <video id="background-video" loop muted>
     <source src="RADDOGS.mp4" type="video/mp4" />
     Your browser does not support the video tag.
@@ -148,16 +177,16 @@
     <button class="btn yellow" data-color="yellow">Yellow</button>
   </div>
 
-  <button id="toggleMusic">Mute</button>
+  <button id="toggleMusic">🔇 Mute</button>
 
   <audio id="bgm" src="" loop></audio>
 
-  <br>
-  <a style="color: #e74c3c; background: rgba(255,255,255,0.2);" href="https://k0rnfine.github.io/Saint_joseph/">Hard Mode</a>
-  <a style="color: yellow; background: rgba(0,0,0,0.3);" href="https://k0rnfine.github.io/OtherThing/">Normal Mode</a>
+  <div class="links">
+    <a href="https://k0rnfine.github.io/Saint_joseph/">Hard Mode</a>
+    <a href="https://k0rnfine.github.io/OtherThing/">Normal Mode</a>
+  </div>
 
   <script>
-    document.getElementById("background-video").muted = true;
     const colors = ["red", "blue", "green", "yellow"];
     let sequence = [];
     let userSequence = [];
@@ -202,7 +231,7 @@
       playSound(color);
       const index = userSequence.length - 1;
       if (userSequence[index] !== sequence[index]) {
-        alert("Wrong! Try again from round 1.");
+        alert("Wrong! Restarting from round 1.");
         round = 1;
         sequence = [];
         roundDisplay.textContent = round;
@@ -213,8 +242,8 @@
 
       if (userSequence.length === sequence.length) {
         if (round === 10) {
-          alert("Congrats! You completed all 10 rounds!");
-          window.location.href = "https://k0rnfine.github.io/Merry-Christmas-554698/EasyMode.html"; 
+          alert("Victory! You completed all rounds!");
+          window.location.href = "https://k0rnfine.github.io/Merry-Christmas-554698/EasyMode.html";
         } else {
           round++;
           roundDisplay.textContent = round;
@@ -232,23 +261,21 @@
     });
 
     toggleBtn.addEventListener("click", () => {
-      bgm.muted = !bgm.muted;
-      video.muted = !video.muted;  // Mute/unmute the video as well
-      toggleBtn.textContent = bgm.muted ? "Unmute" : "Mute";
+      const isMuted = bgm.muted;
+      bgm.muted = !isMuted;
+      video.muted = !isMuted;
+      toggleBtn.textContent = isMuted ? "🔇 Mute" : "🔊 Unmute";
     });
 
-    // Called when the user clicks the popup "Continue"
     function startGame() {
       document.getElementById("startOverlay").style.display = "none";
       bgm.muted = false;
       bgm.play();
       video.muted = false;
       video.play();
-
       generateSequence(1);
       playSequence();
     }
   </script>
-
 </body>
 </html>
