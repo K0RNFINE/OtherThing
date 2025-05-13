@@ -5,21 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="shortcut icon" href="ichika.png">
   <title>Choose Difficulty</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --star-color: rgba(0, 51, 255, 0.199);
+      --star-color: rgba(0, 255, 255, 0.2);
+      --neon-blue: #00ffff;
+      --neon-pink: #ff00ff;
     }
 
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Orbitron', sans-serif;
       height: 100vh;
       overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
+      background: black;
     }
 
     /* Background video */
@@ -36,7 +40,7 @@
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.4);
       z-index: -1;
     }
 
@@ -58,17 +62,9 @@
     }
 
     @keyframes shoot {
-      0% {
-        transform: translateX(0) translateY(0) rotate(45deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(-1000px) translateY(1000px) rotate(45deg);
-        opacity: 0;
-      }
+      0% { transform: translateX(0) translateY(0) rotate(45deg); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateX(-1000px) translateY(1000px) rotate(45deg); opacity: 0; }
     }
 
     .container {
@@ -76,9 +72,11 @@
       z-index: 1;
       text-align: center;
       padding: 40px;
-      background: rgba(45, 202, 255, 0.184);
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .popup-overlay {
@@ -92,11 +90,12 @@
     }
 
     .popup-box {
-      background: white;
+      background: #0d0d0d;
       padding: 40px;
       text-align: center;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      box-shadow: 0 0 25px rgba(0,255,255,0.4);
+      color: white;
     }
 
     .popup-box h2 {
@@ -104,13 +103,21 @@
     }
 
     #startButton {
-      padding: 10px 25px;
+      padding: 12px 30px;
       font-size: 1.1em;
-      border: none;
-      border-radius: 8px;
-      background-color: #2196f3;
-      color: white;
+      border: 2px solid var(--neon-blue);
+      border-radius: 10px;
+      background: transparent;
+      color: var(--neon-blue);
       cursor: pointer;
+      box-shadow: 0 0 10px var(--neon-blue);
+      transition: all 0.3s ease-in-out;
+    }
+
+    #startButton:hover {
+      background: var(--neon-blue);
+      color: black;
+      box-shadow: 0 0 25px var(--neon-blue);
     }
 
     h1 {
@@ -126,77 +133,76 @@
       flex-wrap: wrap;
     }
 
-    .difficulty-btn {
-      padding: 15px 30px;
-      font-size: 1.2em;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      color: rgb(255, 255, 255);
-      position: relative;
-      z-index: 1;
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.681);
-      animation: pulse 2s infinite ease-in-out;
-      transition: transform 0.2s, box-shadow 0.3s;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); box-shadow: 0 0 12px rgba(255,255,255,0.3); }
-      50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.6); }
-      100% { transform: scale(1); box-shadow: 0 0 12px rgba(255,255,255,0.3); }
-    }
-
-    .difficulty-btn:hover {
-      transform: translateY(-5px) scale(1.1);
-      box-shadow: 0 0 25px rgba(109, 109, 109, 0.5);
-    }
-
-    .easy {
-      background-color: #4caf50;
-    }
-
-    .normal {
-      background-color: #2196f3;
-    }
-
-    .hard {
-      background-color: #f44336;
-    }
-
-    /* Typing challenge button style */
+    .difficulty-btn,
     .typing-challenge-btn {
-      padding: 15px 30px;
+      padding: 18px 36px;
       font-size: 1.2em;
-      border: none;
-      border-radius: 12px;
+      border: 2px solid white;
+      border-radius: 20px;
       cursor: pointer;
-      background-color: #9c27b0;
+      background: transparent;
       color: white;
       position: relative;
       z-index: 1;
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.681);
-      transition: transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      transition: transform 0.3s, box-shadow 0.4s, background 0.3s;
+      backdrop-filter: blur(5px);
     }
 
+    .difficulty-btn:hover,
     .typing-challenge-btn:hover {
-      transform: translateY(-5px) scale(1.1);
-      box-shadow: 0 0 25px rgba(109, 109, 109, 0.5);
+      transform: translateY(-6px) scale(1.05) rotateX(5deg);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.1);
     }
 
-    /* Button group second row */
+    .easy {
+      border-color: #4caf50;
+      box-shadow: 0 0 15px #4caf50;
+    }
+
+    .normal {
+      border-color: #2196f3;
+      box-shadow: 0 0 15px #2196f3;
+    }
+
+    .hard {
+      border-color: #f44336;
+      box-shadow: 0 0 15px #f44336;
+    }
+
+    .typing-challenge-btn {
+      border-color: #9c27b0;
+      box-shadow: 0 0 15px #9c27b0;
+    }
+
     .second-row {
-      margin-top: 20px;
+      margin-top: 30px;
+    }
+
+    #muteBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+      padding: 10px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
     }
   </style>
 </head>
 <body>
 
-  <!-- Background video -->
   <video id="background-video" muted loop playsinline>
     <source src="SToRY.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
-  
+
   <div class="stars" id="stars-container"></div>
 
   <div id="popup" class="popup-overlay">
@@ -207,7 +213,7 @@
     </div>
   </div>
 
-  <button id="muteBtn" style="position: fixed; top: 20px; right: 20px; z-index: 10; padding: 10px 16px; font-size: 16px; border: none; border-radius: 8px; background: rgba(0, 0, 0, 0.6); color: white; cursor: pointer; box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);">🔇 Mute</button>
+  <button id="muteBtn">🔇 Mute</button>
 
   <div class="container">
     <h1>Select Difficulty</h1>
@@ -216,8 +222,6 @@
       <button class="difficulty-btn normal" onclick="selectDifficulty('normal')">Normal</button>
       <button class="difficulty-btn hard" onclick="selectDifficulty('hard')">Hard</button>
     </div>
-
-    <!-- Second row for the new Typing Challenge button -->
     <div class="second-row">
       <a href="https://k0rnfine.github.io/OtherThing/typing" class="typing-challenge-btn">Typing Challenge</a>
     </div>
@@ -226,25 +230,18 @@
   <script>
     const bgVideo = document.getElementById("background-video");
 
-    // Play the video when the "Start" button is clicked
     document.getElementById("startButton").addEventListener("click", () => {
       bgVideo.play().catch((e) => {
         console.warn("Autoplay blocked:", e);
       });
-
       document.getElementById("popup").style.display = "none";
     });
 
     const muteBtn = document.getElementById("muteBtn");
     bgVideo.muted = false;
     muteBtn.addEventListener("click", () => {
-      if (bgVideo.muted) {
-        bgVideo.muted = false;
-        muteBtn.textContent = "🔇 Mute";
-      } else {
-        bgVideo.muted = true;
-        muteBtn.textContent = "🔊 Unmute";
-      }
+      bgVideo.muted = !bgVideo.muted;
+      muteBtn.textContent = bgVideo.muted ? "🔊 Unmute" : "🔇 Mute";
     });
 
     function selectDifficulty(level) {
@@ -258,7 +255,7 @@
     }
 
     const container = document.getElementById("stars-container");
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 25; i++) {
       const star = document.createElement("div");
       star.classList.add("star");
       star.style.left = Math.random() * 100 + "vw";
