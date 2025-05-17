@@ -176,6 +176,29 @@
       box-shadow: 0 0 15px #9c27b0;
     }
 
+    .rules-btn {
+      padding: 18px 36px;
+      font-size: 1.2em;
+      border: 2px solid orange;
+      border-radius: 15px;
+      cursor: pointer;
+      background: transparent;
+      color: rgb(255, 255, 255);
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 15px orange;
+      transition: transform 0.3s, box-shadow 0.4s, background 0.3s;
+      text-decoration: none;
+      margin-left: 15px;
+      display: inline-block;
+    }
+
+    .rules-btn:hover {
+      transform: translateY(-4px) scale(1.05) rotateX(5deg);
+      box-shadow: 0 0 25px orange;
+      background: rgba(255, 165, 0, 0.1);
+    }
+
     .second-row {
       margin-top: 30px;
     }
@@ -224,6 +247,7 @@
     </div>
     <div class="second-row">
       <a href="https://k0rnfine.github.io/OtherThing/typing" class="typing-challenge-btn">Typing Challenge</a>
+      <a href="https://k0rnfine.github.io/OtherThing/Rule" class="rules-btn">Rules</a>
     </div>
   </div>
 
