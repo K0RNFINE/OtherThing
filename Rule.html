@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="ichika.png">
+  <title>Rules</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Orbitron', sans-serif;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    #bg-video {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      background-color: black;
+    }
+
+    .mute-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      border-radius: 50%; /* make it round */
+      cursor: pointer;
+      font-size: 24px;
+      display: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      user-select: none;
+    }
+
+    .mute-btn:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+      transform: scale(1.1);
+    }
+
+    section {
+      padding: 100px 20px;
+      background: rgba(0, 0, 0, 0.5);
+      margin: 20px;
+      border-radius: 10px;
+    }
+
+    h2 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .rule-box {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      white-space: pre-line;
+    }
+
+    #popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      color: white;
+      text-align: center;
+      flex-direction: column;
+    }
+
+    #popup button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #222;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+
+    #popup button:hover {
+      background-color: #444;
+    }
+  </style>
+</head>
+<body>
+  <div id="popup">
+    <h1>Welcome to Call Rules</h1>
+    <p>Press continue to begin</p>
+    <button onclick="startExperience()">Continue</button>
+  </div>
+
+  <video id="bg-video" loop muted playsinline>
+    <source src="Vvid.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <button class="mute-btn" onclick="toggleMute()">🔇</button>
+
+  <section>
+    <h2>Rule of Easy Mode</h2>
+    <div class="rule-box" contenteditable="true">
+      - โหมดนี้เป็นโหมดง่ายกฏก็แค่จำสีแล้วกดตามทั้งหมด 10 รอบ
+    </div>
+  </section>
+
+  <section>
+    <h2>Rule of Normal Mode</h2>
+    <div class="rule-box" contenteditable="true">
+      - โหมดนี้น้องต้องใช้ดวงเพราะมีปุ่มทั้งหมด 170 ปุ่ม มีเพียงปุ่มเดียวที่พาไปหาคำใบ้
+      - โดยคำใบ้โหมดนี้ต้องแก้โจทย์ เคมีระดับเริ่มต้น ฟิสิกระดับเริ่มต้น และคณิตศาสตร์ระดับ ม.3
+    </div>
+  </section>
+
+  <section>
+    <h2>Rule of Hard Mode</h2>
+    <div class="rule-box" contenteditable="true">
+      - โหมดนี้น้องต้องเก่งคอมระดับพื้นฐานถึงจะผ่านได้พี่สร้างอันนี้เป็นอันแรกและถ้าน้องผ่านได้พี่จะนับถือเลยน่ะ(อาจะไม่เยอะขนาดนั้นนะเพราะมันถือว่าง่ายมาก)
+      - โดยจะมีคำใบ้บอกเป็นระยะน้องต้องไปเองนะ  "ทำยังไงก็ได้ให้ได้คำใบ้"    
+    </div>
+  </section>
+
+  <section>
+    <h2>Rule of Typing Challenge</h2>
+    <div class="rule-box" contenteditable="true">
+      - โหมดนี้ง่ายๆน้องไม่ต้องใช้สมองเยอะแค่พิมพ์ตามแค่นั้นโดยมี 3 รอบข้อความสุ่ม พิมพ์ตามที่บอกภายใน 30 วินาที รอบแรกให้ลองยังไม่มีเวลาขึ้น รอบ 2,3,4 คือรอบจริง
+      - โดยคำใบ้โหมดนี้ต้องแก้โจทย์ เคมีระดับเริ่มต้น ฟิสิกระดับเริ่มต้น และคณิตศาสตร์ระดับ ม.3 (เหมือนกับโหมด Normal)
+    </div>
+  </section>
+
+  <section>
+    <h2>Punishment</h2>
+    <p>- ถ้าหากน้องไม่สามารถหาตัวพี่เจอได้ใน line หรือชีวิตจริง โทษของน้องคือ น้องต้องเล่นโหมด Speical ให้ผ่านโดยพี่จะส่งไปอีกทีตอนเจอน้องอ่ะนะหวังว่าน้องจะหาพี่เจอนะพี่ขี้เกียจสร้างเว็บละ</p>
+  </section>
+
+  <script>
+    const video = document.getElementById('bg-video');
+    const btn = document.querySelector('.mute-btn');
+
+    // Video starts muted to allow autoplay but will unmute after pressing Continue
+    video.muted = true;
+
+    function toggleMute() {
+      video.muted = !video.muted;
+      // Animate button scale for toggle effect
+      btn.style.transform = 'scale(0.9)';
+      setTimeout(() => {
+        btn.style.transform = 'scale(1)';
+      }, 150);
+      btn.textContent = video.muted ? '🔇' : '🔊';
+    }
+
+    function startExperience() {
+      document.getElementById('popup').style.display = 'none';
+      video.play().catch(() => {});
+      video.muted = false;
+      btn.textContent = '🔊'; // Show mute icon because sound is playing
+      btn.style.display = 'flex';
+    }
+  </script>
+</body>
+</html>
