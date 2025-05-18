@@ -27,29 +27,42 @@
       background-color: black;
     }
 
-    .mute-btn {
+    .mute-btn, .return-btn {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 50px;
+      width: 80px;
       height: 50px;
       background: rgba(0, 0, 0, 0.5);
       color: white;
       border: none;
-      border-radius: 50%; /* make it round */
+      border-radius: 25px;
       cursor: pointer;
-      font-size: 24px;
+      font-size: 16px;
       display: none;
-      display: flex;
       justify-content: center;
       align-items: center;
       transition: background-color 0.3s ease, transform 0.3s ease;
       user-select: none;
+      text-decoration: none;
     }
 
-    .mute-btn:hover {
+    .mute-btn {
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 24px;
+    }
+
+    .mute-btn:hover,
+    .return-btn:hover {
       background-color: rgba(0, 0, 0, 0.8);
       transform: scale(1.1);
+    }
+
+    .return-btn {
+      top: 20px;
+      left: 20px;
     }
 
     section {
@@ -118,6 +131,7 @@
   </video>
 
   <button class="mute-btn" onclick="toggleMute()">🔇</button>
+  <a href="https://k0rnfine.github.io/OtherThing/diffulty" class="return-btn">Return</a>
 
   <section>
     <h2>Rule Hand book</h2>
@@ -176,13 +190,12 @@
   <script>
     const video = document.getElementById('bg-video');
     const btn = document.querySelector('.mute-btn');
+    const returnBtn = document.querySelector('.return-btn');
 
-    // Video starts muted to allow autoplay but will unmute after pressing Continue
     video.muted = true;
 
     function toggleMute() {
       video.muted = !video.muted;
-      // Animate button scale for toggle effect
       btn.style.transform = 'scale(0.9)';
       setTimeout(() => {
         btn.style.transform = 'scale(1)';
@@ -194,8 +207,9 @@
       document.getElementById('popup').style.display = 'none';
       video.play().catch(() => {});
       video.muted = false;
-      btn.textContent = '🔊'; // Show mute icon because sound is playing
+      btn.textContent = '🔊';
       btn.style.display = 'flex';
+      returnBtn.style.display = 'flex';
     }
   </script>
 </body>
