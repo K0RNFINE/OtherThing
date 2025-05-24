@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vertical Clock with Particles</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rotating Analog Clock with Particles</title>
   <style>
     body {
       margin: 0;
@@ -13,36 +13,56 @@
       align-items: center;
       height: 100vh;
       overflow: hidden;
-      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .clock-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      animation: rotateClock 24s linear infinite reverse;
+    }
+
+    @keyframes rotateClock {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     .clock {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 2;
-    }
-
-    .digit-column {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 64px;
-      color: #0ff;
-      text-shadow: 0 0 15px #0ff;
-      height: 160px;
-      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      border: 8px solid #0ff;
+      border-radius: 50%;
       position: relative;
+      box-shadow: 0 0 20px #0ff;
+      z-index: 2;
+      transform: rotate(0deg);
     }
 
-    .digit-column span {
-      line-height: 80px;
-      transition: transform 0.3s ease-in-out;
+    .hand {
+      width: 50%;
+      height: 2px;
+      background: #0ff;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0% 50%;
+      transform: rotate(90deg);
+      box-shadow: 0 0 5px #0ff;
+      transition: transform 0.1s linear;
     }
 
-    .separator {
-      color: white;
-      font-size: 64px;
+    .hour {
+      height: 4px;
+      width: 35%;
+    }
+
+    .minute {
+      width: 45%;
+    }
+
+    .second {
+      background: #f0f;
+      width: 50%;
     }
 
     canvas#particles {
@@ -57,43 +77,42 @@
 </head>
 <body>
   <canvas id="particles"></canvas>
-
-  <div class="clock">
-    <div id="hours" class="digit-column"></div>
-    <div class="separator">:</div>
-    <div id="minutes" class="digit-column"></div>
-    <div class="separator">:</div>
-    <div id="seconds" class="digit-column"></div>
+  <div class="clock-container">
+    <div class="clock">
+      <div class="hand hour" id="hour"></div>
+      <div class="hand minute" id="minute"></div>
+      <div class="hand second" id="second"></div>
+    </div>
   </div>
 
   <script>
-    function updateClock() {
-      const now = new Date();
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const s = String(now.getSeconds()).padStart(2, '0');
+    const hourHand = document.getElementById('hour');
+    const minuteHand = document.getElementById('minute');
+    const secondHand = document.getElementById('second');
 
-      updateColumn('hours', h);
-      updateColumn('minutes', m);
-      updateColumn('seconds', s);
+    let simTime = 0; // simulated time in seconds
+
+    function updateClock() {
+      simTime += 2 * 60 * 60; // 2 seconds = 1 hour = 3600 seconds
+      const hours = Math.floor(simTime / 3600) % 12;
+      const minutes = Math.floor((simTime % 3600) / 60);
+      const seconds = Math.floor(simTime % 60);
+
+      const hourDeg = (hours + minutes / 60) * 30;
+      const minuteDeg = (minutes + seconds / 60) * 6;
+      const secondDeg = seconds * 6;
+
+      hourHand.style.transform = `rotate(${hourDeg}deg)`;
+      minuteHand.style.transform = `rotate(${minuteDeg}deg)`;
+      secondHand.style.transform = `rotate(${secondDeg}deg)`;
 
       spawnParticles();
     }
 
-    function updateColumn(id, value) {
-      const container = document.getElementById(id);
-      container.innerHTML = '';
-      for (let i = 0; i < value.length; i++) {
-        const span = document.createElement('span');
-        span.textContent = value[i];
-        container.appendChild(span);
-      }
-    }
-
-    setInterval(updateClock, 1000);
+    setInterval(updateClock, 2000);
     updateClock();
 
-    // Particle system
+    // Particle System
     const canvas = document.getElementById('particles');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -108,11 +127,11 @@
     function spawnParticles() {
       for (let i = 0; i < 20; i++) {
         particles.push({
-          x: canvas.width / 2,
-          y: canvas.height / 2,
-          dx: (Math.random() - 0.5) * 5,
-          dy: (Math.random() - 0.5) * 5,
-          life: 100 + Math.random() * 100
+          x: window.innerWidth / 2,
+          y: window.innerHeight / 2,
+          dx: (Math.random() - 0.5) * 4,
+          dy: (Math.random() - 0.5) * 4,
+          life: 50 + Math.random() * 50
         });
       }
     }
@@ -120,19 +139,19 @@
     function updateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = '#0ff';
-      particles.forEach((p, i) => {
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
         p.x += p.dx;
         p.y += p.dy;
-        p.life -= 1;
+        p.life--;
         ctx.beginPath();
         ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
         ctx.fill();
         if (p.life <= 0) particles.splice(i, 1);
-      });
+      }
       requestAnimationFrame(updateParticles);
     }
     updateParticles();
   </script>
 </body>
 </html>
-​
