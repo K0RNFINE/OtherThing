@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vertical Clock with Particles</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .clock {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 2;
+    }
+
+    .digit-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 64px;
+      color: #0ff;
+      text-shadow: 0 0 15px #0ff;
+      height: 160px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .digit-column span {
+      line-height: 80px;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .separator {
+      color: white;
+      font-size: 64px;
+    }
+
+    canvas#particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <div class="clock">
+    <div id="hours" class="digit-column"></div>
+    <div class="separator">:</div>
+    <div id="minutes" class="digit-column"></div>
+    <div class="separator">:</div>
+    <div id="seconds" class="digit-column"></div>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+
+      updateColumn('hours', h);
+      updateColumn('minutes', m);
+      updateColumn('seconds', s);
+
+      spawnParticles();
+    }
+
+    function updateColumn(id, value) {
+      const container = document.getElementById(id);
+      container.innerHTML = '';
+      for (let i = 0; i < value.length; i++) {
+        const span = document.createElement('span');
+        span.textContent = value[i];
+        container.appendChild(span);
+      }
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Particle system
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function spawnParticles() {
+      for (let i = 0; i < 20; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          dx: (Math.random() - 0.5) * 5,
+          dy: (Math.random() - 0.5) * 5,
+          life: 100 + Math.random() * 100
+        });
+      }
+    }
+
+    function updateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0ff';
+      particles.forEach((p, i) => {
+        p.x += p.dx;
+        p.y += p.dy;
+        p.life -= 1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+        if (p.life <= 0) particles.splice(i, 1);
+      });
+      requestAnimationFrame(updateParticles);
+    }
+    updateParticles();
+  </script>
+</body>
+</html>
+​
