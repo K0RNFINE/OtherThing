@@ -26,7 +26,6 @@
       background: black;
     }
 
-    /* Background video */
     #background-video {
       position: fixed;
       top: 0; left: 0;
@@ -35,7 +34,6 @@
       z-index: -2;
     }
 
-    /* Dark overlay */
     body::before {
       content: '';
       position: absolute;
@@ -156,20 +154,9 @@
       background: rgba(255, 255, 255, 0.1);
     }
 
-    .easy {
-      border-color: #4caf50;
-      box-shadow: 0 0 15px #4caf50;
-    }
-
-    .normal {
-      border-color: #2196f3;
-      box-shadow: 0 0 15px #2196f3;
-    }
-
-    .hard {
-      border-color: #f44336;
-      box-shadow: 0 0 15px #f44336;
-    }
+    .easy { border-color: #4caf50; box-shadow: 0 0 15px #4caf50; }
+    .normal { border-color: #2196f3; box-shadow: 0 0 15px #2196f3; }
+    .hard { border-color: #f44336; box-shadow: 0 0 15px #f44336; }
 
     .typing-challenge-btn {
       border-color: #9c27b0;
@@ -183,14 +170,12 @@
       border-radius: 15px;
       cursor: pointer;
       background: transparent;
-      color: rgb(255, 255, 255);
-      position: relative;
-      z-index: 1;
-      box-shadow: 0 0 15px orange;
-      transition: transform 0.3s, box-shadow 0.4s, background 0.3s;
-      text-decoration: none;
+      color: white;
       margin-left: 15px;
       display: inline-block;
+      text-decoration: none;
+      box-shadow: 0 0 15px orange;
+      transition: transform 0.3s, box-shadow 0.4s, background 0.3s;
     }
 
     .rules-btn:hover {
@@ -207,7 +192,7 @@
       position: fixed;
       top: 20px;
       right: 20px;
-      z-index: 10;
+      z-index: 9999;
       padding: 10px 16px;
       font-size: 16px;
       border: none;
@@ -217,77 +202,125 @@
       cursor: pointer;
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
     }
+
+    #countdown {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5em;
+      color: white;
+      text-shadow: 0 0 10px #ffea00;
+      font-family: 'Orbitron', sans-serif;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px 20px;
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
+      transition: opacity 1s ease;
+    }
+
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
 
-  <video id="background-video" muted loop playsinline>
-    <source src="SToRY.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+<video id="background-video" muted loop playsinline>
+  <source src="SToRY.mp4" type="video/mp4">
+</video>
 
-  <div class="stars" id="stars-container"></div>
+<div class="stars" id="stars-container"></div>
 
-  <div id="popup" class="popup-overlay">
-    <div class="popup-box">
-      <h2>ยินดีต้อนรับนะน้อง</h2>
-      <p>กดปุ่มเพื่อดำเนินการต่อ</p>
-      <button id="startButton">Start</button>
-    </div>
+<div id="popup" class="popup-overlay">
+  <div class="popup-box">
+    <h2>ยินดีต้อนรับนะน้อง</h2>
+    <p>กดปุ่มเพื่อดำเนินการต่อ</p>
+    <button id="startButton">Start</button>
   </div>
+</div>
 
-  <button id="muteBtn">🔇 Mute</button>
+<button id="muteBtn">🔇 Mute</button>
 
-  <div class="container">
-    <h1>Select Difficulty</h1>
-    <div class="button-group">
-      <button class="difficulty-btn easy" onclick="selectDifficulty('easy')">Easy</button>
-      <button class="difficulty-btn normal" onclick="selectDifficulty('normal')">Normal</button>
-      <button class="difficulty-btn hard" onclick="selectDifficulty('hard')">Hard</button>
-    </div>
-    <div class="second-row">
-      <a href="https://k0rnfine.github.io/OtherThing/typing" class="typing-challenge-btn">Typing Challenge</a>
-      <a href="https://k0rnfine.github.io/OtherThing/Rule" class="rules-btn">Rules</a>
-    </div>
+<div id="countdown">Loading...</div>
+
+<div id="mainContent" class="container">
+  <h1>Select Difficulty</h1>
+  <div class="button-group">
+    <button class="difficulty-btn easy" onclick="selectDifficulty('easy')">Easy</button>
+    <button class="difficulty-btn normal" onclick="selectDifficulty('normal')">Normal</button>
+    <button class="difficulty-btn hard" onclick="selectDifficulty('hard')">Hard</button>
   </div>
+  <div class="second-row">
+    <a href="https://k0rnfine.github.io/OtherThing/typing" class="typing-challenge-btn">Typing Challenge</a>
+    <a href="https://k0rnfine.github.io/OtherThing/Rule" class="rules-btn">Rules</a>
+  </div>
+</div>
 
-  <script>
-    const bgVideo = document.getElementById("background-video");
+<script>
+  const bgVideo = document.getElementById("background-video");
+  const popup = document.getElementById("popup");
 
-    document.getElementById("startButton").addEventListener("click", () => {
-      bgVideo.play().catch((e) => {
-        console.warn("Autoplay blocked:", e);
-      });
-      document.getElementById("popup").style.display = "none";
+  document.getElementById("startButton").addEventListener("click", () => {
+    bgVideo.play().catch((e) => {
+      console.warn("Autoplay blocked:", e);
     });
+    popup.style.display = "none";
+  });
 
-    const muteBtn = document.getElementById("muteBtn");
-    bgVideo.muted = false;
-    muteBtn.addEventListener("click", () => {
-      bgVideo.muted = !bgVideo.muted;
-      muteBtn.textContent = bgVideo.muted ? "🔊 Unmute" : "🔇 Mute";
-    });
+  const muteBtn = document.getElementById("muteBtn");
+  bgVideo.muted = false;
+  muteBtn.addEventListener("click", () => {
+    bgVideo.muted = !bgVideo.muted;
+    muteBtn.textContent = bgVideo.muted ? "🔊 Unmute" : "🔇 Mute";
+  });
 
-    function selectDifficulty(level) {
-      if (level === 'easy') {
-        window.location.href = 'https://k0rnfine.github.io/OtherThing/4button';
-      } else if (level === 'normal') {
-        window.location.href = 'https://k0rnfine.github.io/OtherThing/';
-      } else if (level === 'hard') {
-        window.location.href = 'https://k0rnfine.github.io/Saint_joseph/';
-      }
+  function selectDifficulty(level) {
+    if (level === 'easy') {
+      window.location.href = 'https://k0rnfine.github.io/OtherThing/4button';
+    } else if (level === 'normal') {
+      window.location.href = 'https://k0rnfine.github.io/OtherThing/';
+    } else if (level === 'hard') {
+      window.location.href = 'https://k0rnfine.github.io/Saint_joseph/';
+    }
+  }
+
+  const container = document.getElementById("stars-container");
+  for (let i = 0; i < 25; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.top = Math.random() * 30 + "vh";
+    star.style.animationDelay = Math.random() * 5 + "s";
+    star.style.animationDuration = 2 + Math.random() * 2 + "s";
+    container.appendChild(star);
+  }
+
+  const countdownElement = document.getElementById("countdown");
+  const targetDate = new Date("2025-06-05T00:00:00").getTime();
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    if (distance <= 0) {
+      countdownElement.innerText = "⏰ Timer Reached — Thanks for playing!";
+      document.getElementById("mainContent").classList.add("hidden");
+      return;
     }
 
-    const container = document.getElementById("stars-container");
-    for (let i = 0; i < 25; i++) {
-      const star = document.createElement("div");
-      star.classList.add("star");
-      star.style.left = Math.random() * 100 + "vw";
-      star.style.top = Math.random() * 30 + "vh";
-      star.style.animationDelay = Math.random() * 5 + "s";
-      star.style.animationDuration = 2 + Math.random() * 2 + "s";
-      container.appendChild(star);
-    }
-  </script>
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    countdownElement.innerText = `Time Left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+</script>
+
 </body>
 </html>
