@@ -26,38 +26,6 @@
       display: none;
     }
 
-    /* Typing area */
-    #sentence {
-      font-size: 24px;
-      margin: 20px 0;
-      position: relative;
-      z-index: 1;
-    }
-
-    #input {
-      width: 100%;
-      max-width: 600px;
-      font-size: 18px;
-      padding: 12px 15px;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      outline: none;
-      transition: border 0.3s;
-    }
-
-    #input:focus {
-      border-color: #007bff;
-    }
-
-    #timer {
-      font-size: 20px;
-      margin-top: 10px;
-      color: red;
-      position: relative;
-      z-index: 1;
-    }
-
     /* Popup */
     #popup {
       position: fixed;
@@ -113,6 +81,20 @@
     #muteBtn:hover {
       background-color: #0056b3;
     }
+
+    #timeReached {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      color: white;
+      background: rgba(0,0,0,0.7);
+      padding: 10px 20px;
+      border-radius: 20px;
+      z-index: 999;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -130,88 +112,29 @@
     <button id="continueBtn" onclick="startExperience()">Continue</button>
   </div>
 
-  <!-- Main content -->
-  <h1>Typing Challenge<br>Copy what it said and type it here<br>VVV</h1>
-  <div id="sentence"></div>
-  <input type="text" id="input" placeholder="Start typing here...">
-  <div id="timer"></div>
   <button id="muteBtn" onclick="toggleMute()">Mute</button>
 
+  <div id="timeReached">⏰ Timer Reached — Thanks for playing!</div>
+
   <script>
-    const sentences = [
-      "สิ่งเล็กๆ เค้าเรียกว่ารัก แต่ถ้าสิ่งลับๆ เค้าเรียกว่าชู้",
-      "ใจสั่นๆ นึกว่าเศร้า ที่ไหนได้หิวข้าวนี่เอง",
-      "JavaScript adds interactivity to websites.",
-      "Practice makes perfect, so keep typing!",
-      "คนที่ทำให้เราหลง คือคนที่ส่งโลเคชั่นผิด",
-      "ถึงวันนี้จะไม่ดีแต่วันหน้าก็ยังดีเสมอ",
-    ];
-    const maxSentences = 4;
-    const timeLimit = 30;
-    const nextPage = "https://k0rnfine.github.io/Merry-Christmas-554698/modeNormal002.html";
-
-    let currentSentence = "";
-    let currentIndex = 0;
-    let timeLeft = timeLimit;
-    let timerInterval;
-
-    const sentenceDiv = document.getElementById("sentence");
-    const inputField = document.getElementById("input");
-    const timerDiv = document.getElementById("timer");
     const backgroundVideo = document.getElementById("backgroundVideo");
     const muteBtn = document.getElementById("muteBtn");
-
-    function getRandomSentence(exclude) {
-      let filtered = sentences.filter(s => s !== exclude);
-      return filtered[Math.floor(Math.random() * filtered.length)];
-    }
-
-    function startTimer() {
-      timeLeft = timeLimit;
-      timerDiv.textContent = `Time left: ${timeLeft}s`;
-      clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        timerDiv.textContent = `Time left: ${timeLeft}s`;
-        if (timeLeft <= 0) {
-          nextSentence();
-        }
-      }, 1000);
-    }
-
-    function nextSentence() {
-      if (currentIndex >= maxSentences) {
-        window.location.href = nextPage;
-        return;
-      }
-      currentSentence = getRandomSentence(currentSentence);
-      sentenceDiv.textContent = currentSentence;
-      inputField.value = "";
-      currentIndex++;
-      startTimer();
-    }
-
-    inputField.addEventListener("input", () => {
-      if (inputField.value === currentSentence) {
-        nextSentence();
-      }
-    });
+    const timeReached = document.getElementById("timeReached");
 
     function startExperience() {
       document.getElementById("popup").style.display = "none";
       backgroundVideo.style.display = "block";
-      backgroundVideo.muted = false; // Enable sound by default
+      backgroundVideo.muted = false;
       backgroundVideo.play();
+
+      // Show the timer reached message instantly
+      timeReached.style.display = "block";
     }
 
     function toggleMute() {
       backgroundVideo.muted = !backgroundVideo.muted;
       muteBtn.textContent = backgroundVideo.muted ? "Unmute" : "Mute";
     }
-
-    // Prepare first sentence
-    currentSentence = getRandomSentence("");
-    sentenceDiv.textContent = currentSentence;
   </script>
 
 </body>
