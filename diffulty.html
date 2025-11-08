@@ -227,7 +227,7 @@
 </head>
 <body>
 
-<video id="background-video" muted loop playsinline>
+<video id="background-video" muted playsinline loop preload="auto">
   <source src="SToRY.mp4" type="video/mp4">
 </video>
 
@@ -260,21 +260,37 @@
 
 <script>
   const bgVideo = document.getElementById("background-video");
-  const popup = document.getElementById("popup");
+const popup = document.getElementById("popup");
+const muteBtn = document.getElementById("muteBtn");
 
-  document.getElementById("startButton").addEventListener("click", () => {
-    bgVideo.play().catch((e) => {
-      console.warn("Autoplay blocked:", e);
-    });
+// Start muted; only allow unmute after playback begins
+document.getElementById("startButton").addEventListener("click", async () => {
+  try {
+    // keep muted for the first play to satisfy iOS/Safari policies
+    bgVideo.muted = true;
+    await bgVideo.play();
     popup.style.display = "none";
-  });
+    // now allow the button to toggle sound
+    muteBtn.disabled = false;
+  } catch (e) {
+    console.warn("Playback blocked:", e);
+  }
+});
 
-  const muteBtn = document.getElementById("muteBtn");
-  bgVideo.muted = false;
-  muteBtn.addEventListener("click", () => {
-    bgVideo.muted = !bgVideo.muted;
-    muteBtn.textContent = bgVideo.muted ? "🔊 Unmute" : "🔇 Mute";
-  });
+// Mute toggle AFTER playback started
+muteBtn.disabled = true; // enabled after successful play
+muteBtn.addEventListener("click", () => {
+  bgVideo.muted = !bgVideo.muted;
+  muteBtn.textContent = bgVideo.muted ? "🔊 Unmute" : "🔇 Mute";
+});
+
+// Helpful diagnostics
+bgVideo.addEventListener('error', () => {
+  const err = bgVideo.error;
+  console.warn('Video error', err && err.code);
+});
+bgVideo.addEventListener('canplay', () => console.log('Video can play'));
+bgVideo.addEventListener('playing', () => console.log('Video is playing'));
 
   function selectDifficulty(level) {
     if (level === 'easy') {
@@ -324,5 +340,6 @@
 
 </body>
 </html>
+
 
 
