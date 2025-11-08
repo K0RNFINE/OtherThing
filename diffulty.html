@@ -7,284 +7,320 @@
   <title>Choose Difficulty</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
-    :root{
+    :root {
       --star-color: rgba(0, 255, 255, 0.2);
       --neon-blue: #00ffff;
       --neon-pink: #ff00ff;
     }
-    *{box-sizing:border-box;}
 
-    body{
-      margin:0;
-      font-family:'Orbitron',sans-serif;
-      min-height:100vh;
-      overflow:hidden;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      position:relative;
-      background:#000;
-    }
-
-    /* Background video */
-    #background-video{
-      position:fixed;
-      top:0;left:0;
-      width:100%;height:100%;
-      object-fit:cover;
-      z-index:-2;
-    }
-    body::before{
-      content:'';
-      position:absolute;inset:0;
-      background:rgba(0,0,0,.4);
-      z-index:-1;
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Orbitron', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      background: black;
     }
 
-    /* Stars (do not capture clicks) */
-    .stars{
-      position:absolute;inset:0;
-      overflow:hidden;
-      z-index:0;
-      pointer-events:none;
-    }
-    .star{
-      position:absolute;
-      width:2px;height:100px;
-      background:linear-gradient(transparent,var(--star-color));
-      animation:shoot 3s linear infinite;
-      opacity:.6;
-    }
-    @keyframes shoot{
-      0%{transform:translateX(0) translateY(0) rotate(45deg);opacity:0;}
-      10%{opacity:1;}
-      100%{transform:translateX(-1000px) translateY(1000px) rotate(45deg);opacity:0;}
+    #background-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -2;
     }
 
-    /* Main card */
-    .container{
-      position:relative;
-      z-index:1;
-      text-align:center;
-      padding:32px 28px;
-      background:rgba(255,255,255,0.05);
-      border-radius:20px;
-      backdrop-filter:blur(15px);
-      border:1px solid rgba(255,255,255,0.12);
-      box-shadow:0 0 30px rgba(0,255,255,0.2);
-      width:min(900px,92vw);
-    }
-    h1{
-      margin:0 0 22px;
-      color:#fff;
-      font-size:clamp(22px,4vw,36px);
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: -1;
     }
 
-    /* Buttons layout */
-    .button-group{
-      display:flex;
-      flex-wrap:wrap;
-      justify-content:center;
-      gap:18px;
-      margin:0 auto 16px;
-      max-width:100%;
-    }
-    .second-row{
-      display:flex;
-      flex-wrap:wrap;
-      justify-content:center;
-      gap:16px;
-      margin-top:18px;
+    .stars {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      z-index: 0;
     }
 
-    .difficulty-btn,.typing-challenge-btn,.rules-btn{
-      padding:16px 28px;
-      font-size:1.05em;
-      border:2px solid #fff;
-      border-radius:18px;
-      background:transparent;
-      color:#fff;
-      cursor:pointer;
-      position:relative;
-      z-index:1;
-      box-shadow:0 0 15px rgba(255,255,255,0.25);
-      transition:transform .25s, box-shadow .35s, background .25s, border-color .25s;
-      backdrop-filter:blur(5px);
-      text-decoration:none;
-      min-width:160px;
-    }
-    .difficulty-btn:hover,.typing-challenge-btn:hover,.rules-btn:hover{
-      transform:translateY(-6px) scale(1.03) rotateX(4deg);
-      box-shadow:0 0 30px rgba(0,255,255,0.6);
-      background:rgba(255,255,255,0.08);
-    }
-    .easy{border-color:#4caf50; box-shadow:0 0 15px #4caf50;}
-    .normal{border-color:#2196f3; box-shadow:0 0 15px #2196f3;}
-    .hard{border-color:#f44336; box-shadow:0 0 15px #f44336;}
-    .typing-challenge-btn{border-color:#9c27b0; box-shadow:0 0 15px #9c27b0;}
-    .rules-btn{border-color:orange; box-shadow:0 0 15px orange;}
-
-    /* Popup */
-    .popup-overlay{
-      position:fixed; inset:0;
-      background:rgba(0,0,0,0.85);
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      z-index:9999;
-    }
-    .popup-box{
-      background:#0d0d0d;
-      padding:32px 28px;
-      text-align:center;
-      border-radius:12px;
-      box-shadow:0 0 25px rgba(0,255,255,0.4);
-      color:#fff;
-      width:min(520px,92vw);
-    }
-    .popup-box h2{margin:0 0 10px;}
-    #startButton{
-      padding:12px 30px;
-      font-size:1.05em;
-      border:2px solid var(--neon-blue);
-      border-radius:10px;
-      background:transparent;
-      color:var(--neon-blue);
-      cursor:pointer;
-      box-shadow:0 0 10px var(--neon-blue);
-      transition:all .25s ease-in-out;
-      margin-top:12px;
-    }
-    #startButton:hover{background:var(--neon-blue); color:#000; box-shadow:0 0 25px var(--neon-blue);}
-    .hidden{display:none !important;}
-
-    /* Floating controls */
-    #muteBtn{
-      position:fixed; top:16px; right:16px; z-index:50;
-      padding:10px 14px; font-size:16px;
-      border:none; border-radius:8px;
-      background:rgba(0,0,0,0.6); color:#fff; cursor:pointer;
-      box-shadow:0 0 8px rgba(0,0,0,0.4);
-    }
-    #countdown{
-      position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
-      font-size:1.1em; color:#fff; text-shadow:0 0 10px #ff0000;
-      font-family:'Orbitron',sans-serif; z-index:50;
-      background:rgba(0,0,0,0.4); padding:10px 16px; border-radius:10px;
-      backdrop-filter:blur(5px);
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 100px;
+      background: linear-gradient(transparent, var(--star-color));
+      animation: shoot 3s linear infinite;
+      opacity: 0.6;
     }
 
-    @media (max-width:520px){
-      .difficulty-btn,.typing-challenge-btn,.rules-btn{min-width:120px; padding:14px 18px;}
+    @keyframes shoot {
+      0% { transform: translateX(0) translateY(0) rotate(45deg); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateX(-1000px) translateY(1000px) rotate(45deg); opacity: 0; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .popup-box {
+      background: #0d0d0d;
+      padding: 40px;
+      text-align: center;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0,255,255,0.4);
+      color: white;
+    }
+
+    .popup-box h2 {
+      margin-top: 0;
+    }
+
+    #startButton {
+      padding: 12px 30px;
+      font-size: 1.1em;
+      border: 2px solid var(--neon-blue);
+      border-radius: 10px;
+      background: transparent;
+      color: var(--neon-blue);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--neon-blue);
+      transition: all 0.3s ease-in-out;
+    }
+
+    #startButton:hover {
+      background: var(--neon-blue);
+      color: black;
+      box-shadow: 0 0 25px var(--neon-blue);
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 2em;
+      color: #ffffff;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .difficulty-btn,
+    .typing-challenge-btn {
+      padding: 18px 36px;
+      font-size: 1.2em;
+      border: 2px solid white;
+      border-radius: 20px;
+      cursor: pointer;
+      background: transparent;
+      color: white;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      transition: transform 0.3s, box-shadow 0.4s, background 0.3s;
+      backdrop-filter: blur(5px);
+    }
+
+    .difficulty-btn:hover,
+    .typing-challenge-btn:hover {
+      transform: translateY(-6px) scale(1.05) rotateX(5deg);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .easy { border-color: #4caf50; box-shadow: 0 0 15px #4caf50; }
+    .normal { border-color: #2196f3; box-shadow: 0 0 15px #2196f3; }
+    .hard { border-color: #f44336; box-shadow: 0 0 15px #f44336; }
+
+    .typing-challenge-btn {
+      border-color: #9c27b0;
+      box-shadow: 0 0 15px #9c27b0;
+    }
+
+    .rules-btn {
+      padding: 18px 36px;
+      font-size: 1.2em;
+      border: 2px solid orange;
+      border-radius: 15px;
+      cursor: pointer;
+      background: transparent;
+      color: white;
+      margin-left: 15px;
+      display: inline-block;
+      text-decoration: none;
+      box-shadow: 0 0 15px orange;
+      transition: transform 0.3s, box-shadow 0.4s, background 0.3s;
+    }
+
+    .rules-btn:hover {
+      transform: translateY(-4px) scale(1.05) rotateX(5deg);
+      box-shadow: 0 0 25px orange;
+      background: rgba(255, 165, 0, 0.1);
+    }
+
+    .second-row {
+      margin-top: 30px;
+    }
+
+    #muteBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      padding: 10px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+    }
+
+    #countdown {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5em;
+      color: white;
+      text-shadow: 0 0 10px #ff0000;
+      font-family: 'Orbitron', sans-serif;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px 20px;
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
+      transition: opacity 1s ease;
+    }
+
+    .hidden {
+      display: none !important;
     }
   </style>
 </head>
 <body>
 
-  <video id="background-video" muted playsinline loop preload="auto">
-    <source src="SToRY.mp4" type="video/mp4">
-  </video>
+<video id="background-video" muted loop playsinline>
+  <source src="SToRY.mp4" type="video/mp4">
+</video>
 
-  <div class="stars" id="stars-container"></div>
+<div class="stars" id="stars-container"></div>
 
-  <div id="popup" class="popup-overlay">
-    <div class="popup-box">
-      <h2>ยินดีต้อนรับนะน้อง</h2>
-      <p>กดปุ่มเพื่อดำเนินการต่อ</p>
-      <button id="startButton">Start</button>
-    </div>
+<div id="popup" class="popup-overlay">
+  <div class="popup-box">
+    <h2>ยินดีต้อนรับนะน้อง</h2>
+    <p>กดปุ่มเพื่อดำเนินการต่อ</p>
+    <button id="startButton">Start</button>
   </div>
+</div>
 
-  <button id="muteBtn" disabled>🔇 Mute</button>
-  <div id="countdown">Loading...</div>
+<button id="muteBtn">🔇 Mute</button>
 
-  <main id="mainContent" class="container" aria-live="polite">
-    <h1>Select Difficulty</h1>
-    <div class="button-group">
-      <button class="difficulty-btn easy"   data-level="easy">Easy</button>
-      <button class="difficulty-btn normal" data-level="normal">Normal</button>
-      <button class="difficulty-btn hard"   data-level="hard">Hard</button>
-    </div>
-    <div class="second-row">
-      <a href="https://k0rnfine.github.io/OtherThing/typing" class="typing-challenge-btn">Typing Challenge</a>
-      <a href="https://k0rnfine.github.io/OtherThing/Rule" class="rules-btn">Rules</a>
-    </div>
-  </main>
+<div id="countdown">Loading...</div>
 
-  <script>
-    const bgVideo   = document.getElementById('background-video');
-    const popup     = document.getElementById('popup');
-    const startBtn  = document.getElementById('startButton');
-    const muteBtn   = document.getElementById('muteBtn');
-    const container = document.getElementById('stars-container');
+<div id="mainContent" class="container">
+  <h1>Select Difficulty</h1>
+  <div class="button-group">
+    <button class="difficulty-btn easy" onclick="selectDifficulty('easy')">Easy</button>
+    <button class="difficulty-btn normal" onclick="selectDifficulty('normal')">Normal</button>
+    <button class="difficulty-btn hard" onclick="selectDifficulty('hard')">Hard</button>
+  </div>
+  <div class="second-row">
+    <a href="https://k0rnfine.github.io/OtherThing/typing" class="typing-challenge-btn">Typing Challenge</a>
+    <a href="https://k0rnfine.github.io/OtherThing/Rule" class="rules-btn">Rules</a>
+  </div>
+</div>
 
-    // Create stars (non-blocking layer)
-    for(let i=0;i<25;i++){
-      const star=document.createElement('div');
-      star.className='star';
-      star.style.left = (Math.random()*100) + 'vw';
-      star.style.top  = (Math.random()*30)  + 'vh';
-      star.style.animationDelay   = (Math.random()*5) + 's';
-      star.style.animationDuration= (2+Math.random()*2) + 's';
-      container.appendChild(star);
+<script>
+  const bgVideo = document.getElementById("background-video");
+  const popup = document.getElementById("popup");
+
+  document.getElementById("startButton").addEventListener("click", () => {
+    bgVideo.play().catch((e) => {
+      console.warn("Autoplay blocked:", e);
+    });
+    popup.style.display = "none";
+  });
+
+  const muteBtn = document.getElementById("muteBtn");
+  bgVideo.muted = false;
+  muteBtn.addEventListener("click", () => {
+    bgVideo.muted = !bgVideo.muted;
+    muteBtn.textContent = bgVideo.muted ? "🔊 Unmute" : "🔇 Mute";
+  });
+
+  function selectDifficulty(level) {
+    if (level === 'easy') {
+      window.location.href = 'https://k0rnfine.github.io/OtherThing/4button';
+    } else if (level === 'normal') {
+      window.location.href = 'https://k0rnfine.github.io/OtherThing/';
+    } else if (level === 'hard') {
+      window.location.href = 'https://k0rnfine.github.io/Saint_joseph/';
+    }
+  }
+
+  const container = document.getElementById("stars-container");
+  for (let i = 0; i < 25; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.top = Math.random() * 30 + "vh";
+    star.style.animationDelay = Math.random() * 5 + "s";
+    star.style.animationDuration = 2 + Math.random() * 2 + "s";
+    container.appendChild(star);
+  }
+
+  const countdownElement = document.getElementById("countdown");
+  const targetDate = new Date("2050-06-05T00:00:00").getTime();
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    if (distance <= 0) {
+      countdownElement.innerText = "⏰ Timer Reached — Thanks for playing!";
+      document.getElementById("mainContent").classList.add("hidden");
+      return;
     }
 
-    // Difficulty click (event delegation keeps layout tidy)
-    document.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.difficulty-btn');
-      if(!btn) return;
-      const level = btn.dataset.level;
-      if(level==='easy'){
-        location.href='https://k0rnfine.github.io/OtherThing/4button';
-      }else if(level==='normal'){
-        location.href='https://k0rnfine.github.io/OtherThing/';
-      }else if(level==='hard'){
-        location.href='https://k0rnfine.github.io/Saint_joseph/';
-      }
-    });
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    // Start flow: play muted first (policy-friendly), then enable mute toggle and hide popup
-    startBtn.addEventListener('click', async ()=>{
-      try{
-        bgVideo.muted = true;           // ensure first play is muted
-        await bgVideo.play();           // user gesture → should succeed
-        popup.classList.add('hidden');  // ← reliably removes the overlay
-        muteBtn.disabled = false;       // allow toggling audio
-      }catch(err){
-        console.warn('Playback blocked:', err);
-      }
-    });
+    countdownElement.innerText = `Time Left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
 
-    // Mute/unmute after playback started
-    muteBtn.addEventListener('click', ()=>{
-      bgVideo.muted = !bgVideo.muted;
-      muteBtn.textContent = bgVideo.muted ? '🔊 Unmute' : '🔇 Mute';
-    });
-
-    // Diagnostics (optional)
-    bgVideo.addEventListener('canplay', ()=>console.log('Video can play'));
-    bgVideo.addEventListener('playing', ()=>console.log('Video is playing'));
-    bgVideo.addEventListener('error', ()=>console.warn('Video error code:', bgVideo.error && bgVideo.error.code));
-
-    // Countdown
-    const countdownElement = document.getElementById('countdown');
-    const targetDate = new Date('2050-06-05T00:00:00').getTime();
-    function updateCountdown(){
-      const now = Date.now();
-      const distance = targetDate - now;
-      if(distance<=0){
-        countdownElement.innerText = '⏰ Timer Reached — Thanks for playing!';
-        document.getElementById('mainContent').classList.add('hidden');
-        return;
-      }
-      const d = Math.floor(distance / (1000*60*60*24));
-      const h = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-      const m = Math.floor((distance%(1000*60*60))/(1000*60));
-      const s = Math.floor((distance%(1000*60))/1000);
-      countdownElement.innerText = `Time Left: ${d}d ${h}h ${m}m ${s}s`;
-    }
-    setInterval(updateCountdown,1000); updateCountdown();
-  </script>
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+</script>
 
 </body>
 </html>
