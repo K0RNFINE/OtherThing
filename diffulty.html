@@ -96,10 +96,6 @@
       color: white;
     }
 
-    .popup-box h2 {
-      margin-top: 0;
-    }
-
     #startButton {
       padding: 12px 30px;
       font-size: 1.1em;
@@ -118,75 +114,25 @@
       box-shadow: 0 0 25px var(--neon-blue);
     }
 
-    h1 {
-      margin-bottom: 30px;
-      font-size: 2em;
-      color: #ffffff;
-    }
-
     .button-group {
       display: flex;
       gap: 20px;
       justify-content: center;
-      flex-wrap: wrap;
     }
 
-    .difficulty-btn,
-    .typing-challenge-btn {
+    .difficulty-btn {
       padding: 18px 36px;
-      font-size: 1.2em;
-      border: 2px solid white;
       border-radius: 20px;
       cursor: pointer;
-      background: transparent;
+      border: 2px solid white;
       color: white;
-      position: relative;
-      z-index: 1;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-      transition: transform 0.3s, box-shadow 0.4s, background 0.3s;
-      backdrop-filter: blur(5px);
-    }
-
-    .difficulty-btn:hover,
-    .typing-challenge-btn:hover {
-      transform: translateY(-6px) scale(1.05) rotateX(5deg);
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .easy { border-color: #4caf50; box-shadow: 0 0 15px #4caf50; }
-    .normal { border-color: #2196f3; box-shadow: 0 0 15px #2196f3; }
-    .hard { border-color: #f44336; box-shadow: 0 0 15px #f44336; }
-
-    .typing-challenge-btn {
-      border-color: #9c27b0;
-      box-shadow: 0 0 15px #9c27b0;
-    }
-
-    .rules-btn {
-      padding: 18px 36px;
-      font-size: 1.2em;
-      border: 2px solid orange;
-      border-radius: 15px;
-      cursor: pointer;
       background: transparent;
-      color: white;
-      margin-left: 15px;
-      display: inline-block;
-      text-decoration: none;
-      box-shadow: 0 0 15px orange;
-      transition: transform 0.3s, box-shadow 0.4s, background 0.3s;
+      font-size: 1.2rem;
     }
 
-    .rules-btn:hover {
-      transform: translateY(-4px) scale(1.05) rotateX(5deg);
-      box-shadow: 0 0 25px orange;
-      background: rgba(255, 165, 0, 0.1);
-    }
-
-    .second-row {
-      margin-top: 30px;
-    }
+    .easy { border-color: #4caf50; }
+    .normal { border-color: #2196f3; }
+    .hard { border-color: #f44336; }
 
     #muteBtn {
       position: fixed;
@@ -194,13 +140,11 @@
       right: 20px;
       z-index: 9999;
       padding: 10px 16px;
-      font-size: 16px;
-      border: none;
       border-radius: 8px;
-      background: rgba(0, 0, 0, 0.6);
+      border: none;
       color: white;
+      background: rgba(0,0,0,0.5);
       cursor: pointer;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
     }
 
     #countdown {
@@ -210,14 +154,7 @@
       transform: translateX(-50%);
       font-size: 1.5em;
       color: white;
-      text-shadow: 0 0 10px #ff0000;
-      font-family: 'Orbitron', sans-serif;
       z-index: 10;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 10px 20px;
-      border-radius: 10px;
-      backdrop-filter: blur(5px);
-      transition: opacity 1s ease;
     }
 
     .hidden {
@@ -241,7 +178,7 @@
   </div>
 </div>
 
-<button id="muteBtn">🔇 Mute</button>
+<button id="muteBtn" disabled>🔇 Mute</button>
 
 <div id="countdown">Loading...</div>
 
@@ -252,46 +189,31 @@
     <button class="difficulty-btn normal" onclick="selectDifficulty('normal')">Normal</button>
     <button class="difficulty-btn hard" onclick="selectDifficulty('hard')">Hard</button>
   </div>
-  <div class="second-row">
-    <a href="https://k0rnfine.github.io/OtherThing/typing" class="typing-challenge-btn">Typing Challenge</a>
-    <a href="https://k0rnfine.github.io/OtherThing/Rule" class="rules-btn">Rules</a>
-  </div>
 </div>
 
 <script>
   const bgVideo = document.getElementById("background-video");
-const popup = document.getElementById("popup");
-const muteBtn = document.getElementById("muteBtn");
+  const popup = document.getElementById("popup");
+  const muteBtn = document.getElementById("muteBtn");
 
-// Start muted; only allow unmute after playback begins
-document.getElementById("startButton").addEventListener("click", async () => {
-  try {
-    // keep muted for the first play to satisfy iOS/Safari policies
-    bgVideo.muted = true;
-    await bgVideo.play();
-    popup.style.display = "none";
-    // now allow the button to toggle sound
-    muteBtn.disabled = false;
-  } catch (e) {
-    console.warn("Playback blocked:", e);
-  }
-});
+  // Start button
+  document.getElementById("startButton").addEventListener("click", async () => {
+    try {
+      await bgVideo.play();
+      popup.style.display = "none"; // ✅ Hide popup
+      muteBtn.disabled = false;     // Enable mute button
+    } catch (e) {
+      console.warn("Playback blocked:", e);
+    }
+  });
 
-// Mute toggle AFTER playback started
-muteBtn.disabled = true; // enabled after successful play
-muteBtn.addEventListener("click", () => {
-  bgVideo.muted = !bgVideo.muted;
-  muteBtn.textContent = bgVideo.muted ? "🔊 Unmute" : "🔇 Mute";
-});
+  // Mute/Unmute
+  muteBtn.addEventListener("click", () => {
+    bgVideo.muted = !bgVideo.muted;
+    muteBtn.textContent = bgVideo.muted ? "🔊 Unmute" : "🔇 Mute";
+  });
 
-// Helpful diagnostics
-bgVideo.addEventListener('error', () => {
-  const err = bgVideo.error;
-  console.warn('Video error', err && err.code);
-});
-bgVideo.addEventListener('canplay', () => console.log('Video can play'));
-bgVideo.addEventListener('playing', () => console.log('Video is playing'));
-
+  // Difficulty selection
   function selectDifficulty(level) {
     if (level === 'easy') {
       window.location.href = 'https://k0rnfine.github.io/OtherThing/4button';
@@ -302,6 +224,32 @@ bgVideo.addEventListener('playing', () => console.log('Video is playing'));
     }
   }
 
+  // Countdown timer
+  const countdownElement = document.getElementById("countdown");
+  const targetDate = new Date("2050-06-05T00:00:00").getTime();
+
+  function updateCountdown() {
+    const now = Date.now();
+    const distance = targetDate - now;
+
+    if (distance <= 0) {
+      countdownElement.innerHTML = "⏰ Timer Reached — Thanks for playing!";
+      document.getElementById("mainContent").classList.add("hidden");
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    countdownElement.innerHTML = `Time Left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // Stars
   const container = document.getElementById("stars-container");
   for (let i = 0; i < 25; i++) {
     const star = document.createElement("div");
@@ -312,34 +260,28 @@ bgVideo.addEventListener('playing', () => console.log('Video is playing'));
     star.style.animationDuration = 2 + Math.random() * 2 + "s";
     container.appendChild(star);
   }
-
-  const countdownElement = document.getElementById("countdown");
-  const targetDate = new Date("2050-06-05T00:00:00").getTime();
-
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
-
-    if (distance <= 0) {
-      countdownElement.innerText = "⏰ Timer Reached — Thanks for playing!";
-      document.getElementById("mainContent").classList.add("hidden");
-      return;
-    }
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    countdownElement.innerText = `Time Left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-  }
-
-  setInterval(updateCountdown, 1000);
-  updateCountdown();
 </script>
 
 </body>
 </html>
+    countdownElement.innerHTML = `Time Left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
 
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
 
+  // Stars
+  const container = document.getElementById("stars-container");
+  for (let i = 0; i < 25; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.top = Math.random() * 30 + "vh";
+    star.style.animationDelay = Math.random() * 5 + "s";
+    star.style.animationDuration = 2 + Math.random() * 2 + "s";
+    container.appendChild(star);
+  }
+</script>
 
+</body>
+</html>
